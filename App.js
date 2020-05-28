@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { Component } from 'react';
 import 'react-native-gesture-handler';
 import { Platform, StatusBar, View, StyleSheet, Text } from 'react-native';
@@ -13,21 +12,30 @@ import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import { setLocalNotification } from './utils/helpers';
 import DecksView from './components/DecksView';
-import CardsView from './components/CardsView';
+import DeckDetails from './components/DeckDetails';
+import { white, purple } from './utils/colors';
+
+function AppStatusBar({ backgroundColor, ...props }) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  );
+}
 
 // Config for StackNav
 const StackNavigatorConfig = {
   headerMode: 'screen',
 };
 const StackConfig = {
-  TabNav: {
+  DecksView: {
     name: 'Home',
     component: DecksView,
     options: { headerShown: false },
   },
-  EntryDetail: {
-    name: 'Cards',
-    component: CardsView,
+  DeckDetails: {
+    name: 'Deck Details',
+    component: DeckDetails,
     options: {
       headerTintColor: white,
       headerStyle: {
@@ -36,10 +44,31 @@ const StackConfig = {
     },
   },
 };
+
 const Stack = createStackNavigator();
 const MainNav = () => (
   <Stack.Navigator {...StackNavigatorConfig}>
-    <Stack.Screen {...StackConfig['TabNav']} />
-    <Stack.Screen {...StackConfig['EntryDetail']} />
+    <Stack.Screen {...StackConfig['DecksView']} />
+    <Stack.Screen {...StackConfig['DeckDetails']} />
   </Stack.Navigator>
 );
+
+// App
+export default class App extends React.Component {
+  // componentDidMount() {
+  //   setLocalNotification();
+  // }
+  render() {
+    const store = createStore(reducer);
+    return (
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <AppStatusBar backgroundColor={purple} barStyle="light-content" />
+          <NavigationContainer>
+            <MainNav />
+          </NavigationContainer>
+        </View>
+      </Provider>
+    );
+  }
+}

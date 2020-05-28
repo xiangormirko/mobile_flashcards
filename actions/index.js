@@ -12,7 +12,7 @@ export function receiveDecks(decks) {
   };
 }
 
-export function CREATE_DECK(deck) {
+export function createDeck(deck) {
   return {
     type: CREATE_DECK,
     deck,
