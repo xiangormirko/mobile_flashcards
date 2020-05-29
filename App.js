@@ -59,7 +59,11 @@ export default class App extends React.Component {
   //   setLocalNotification();
   // }
   render() {
-    const store = createStore(reducer);
+    const store = createStore(
+      reducer /* preloadedState, */,
+      +window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+    );
     return (
       <Provider store={store}>
         <View style={{ flex: 1 }}>
