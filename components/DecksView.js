@@ -3,16 +3,16 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import Card from './Card';
+import CreateDeck from './CreateDeck';
 
 class DecksView extends Component {
   render() {
     return (
       <View>
-        <Card title={'Titolo'} text={'Lorem Ipsum'} />
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Deck Details')}
+          onPress={() => this.props.navigation.navigate('Create Deck')}
         >
-          <Text> Go to Details</Text>
+          <Text> Create a deck </Text>
         </TouchableOpacity>
       </View>
     );

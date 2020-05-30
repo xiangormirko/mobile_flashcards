@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import 'react-native-gesture-handler';
 import { Platform, StatusBar, View, StyleSheet, Text } from 'react-native';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import reducer from './reducers';
+import middleware from './middleware';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,7 +14,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { setLocalNotification } from './utils/helpers';
 import DecksView from './components/DecksView';
 import DeckDetails from './components/DeckDetails';
+import CreateDeck from './components/CreateDeck';
 import { white, purple } from './utils/colors';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import logger from './middleware/logger';
 
 function AppStatusBar({ backgroundColor, ...props }) {
   return (
@@ -33,6 +38,11 @@ const StackConfig = {
     component: DecksView,
     options: { headerShown: false },
   },
+  CreateDeck: {
+    name: 'Create Deck',
+    component: CreateDeck,
+    options: { headerShown: false },
+  },
   DeckDetails: {
     name: 'Deck Details',
     component: DeckDetails,
@@ -50,6 +60,7 @@ const MainNav = () => (
   <Stack.Navigator {...StackNavigatorConfig}>
     <Stack.Screen {...StackConfig['DecksView']} />
     <Stack.Screen {...StackConfig['DeckDetails']} />
+    <Stack.Screen {...StackConfig['CreateDeck']} />
   </Stack.Navigator>
 );
 
@@ -60,9 +71,11 @@ export default class App extends React.Component {
   // }
   render() {
     const store = createStore(
-      reducer /* preloadedState, */,
-      +window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
+      reducer,
+      compose(
+        applyMiddleware(thunk, logger),
+        window.devToolsExtension ? window.devToolsExtension() : (f) => f
+      )
     );
     return (
       <Provider store={store}>
