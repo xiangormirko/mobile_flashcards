@@ -41,7 +41,7 @@ class CreateDeck extends Component {
   render() {
     const { title } = this.state;
     return (
-      <View>
+      <View style={style.container}>
         <View style={style.card}>
           {/* <Text style={{ color: purple, fontSize: 25 }}>{title} "Ciao"</Text> */}
           <Text style={style.title}>Enter Deck Name</Text>
@@ -61,6 +61,11 @@ class CreateDeck extends Component {
 }
 
 const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
   card: {
     padding: 20,
     margin: 10,
@@ -77,6 +82,7 @@ const style = StyleSheet.create({
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
+    paddingLeft: 5,
   },
 });
 

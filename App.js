@@ -41,7 +41,7 @@ const StackConfig = {
   CreateDeck: {
     name: 'Create Deck',
     component: CreateDeck,
-    options: { headerShown: false },
+    options: { headerShown: true },
   },
   DeckDetails: {
     name: 'Deck Details',
