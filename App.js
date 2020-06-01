@@ -15,6 +15,7 @@ import { setLocalNotification } from './utils/helpers';
 import DecksView from './components/DecksView';
 import DeckDetails from './components/DeckDetails';
 import CreateDeck from './components/CreateDeck';
+import AddCard from './components/AddCard';
 import { white, purple } from './utils/colors';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
@@ -53,6 +54,11 @@ const StackConfig = {
       },
     },
   },
+  AddCard: {
+    name: 'Add Card',
+    component: AddCard,
+    options: { headerShown: true },
+  },
 };
 
 const Stack = createStackNavigator();
@@ -61,6 +67,7 @@ const MainNav = () => (
     <Stack.Screen {...StackConfig['DecksView']} />
     <Stack.Screen {...StackConfig['DeckDetails']} />
     <Stack.Screen {...StackConfig['CreateDeck']} />
+    <Stack.Screen {...StackConfig['AddCard']} />
   </Stack.Navigator>
 );
 

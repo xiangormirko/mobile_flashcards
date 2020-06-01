@@ -18,3 +18,12 @@ export function addDeck(deck) {
     deck,
   };
 }
+
+export function addCard({ deckId, cardId, card }) {
+  return {
+    type: ADD_CARD,
+    deckId,
+    cardId,
+    card,
+  };
+}

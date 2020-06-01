@@ -1,4 +1,4 @@
-import { RECEIVE_DECKS, CREATE_DECK, DELETE_DECK } from '../actions';
+import { RECEIVE_DECKS, ADD_DECK, DELETE_DECK, ADD_CARD } from '../actions';
 
 export default function decks(state = {}, action) {
   switch (action.type) {
@@ -8,11 +8,26 @@ export default function decks(state = {}, action) {
         ...action.decks,
       };
 
-    case CREATE_DECK:
+    case ADD_DECK:
       return {
         ...state,
         ...action.deck,
       };
+    case ADD_CARD:
+      const { deckId, cardId, card } = action;
+      return {
+        ...state,
+        [deckId]: {
+          ...state[deckId],
+          [cards]: {
+            ...state[deckId].cards,
+            cards: state[deckId].cards.includes(cardId)
+              ? console.log('same card already exists')
+              : state[deckId].cards.concat(card),
+          },
+        },
+      };
+
     default:
       return state;
   }

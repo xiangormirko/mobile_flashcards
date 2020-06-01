@@ -13,6 +13,7 @@ import Card from './Card';
 import CreateDeck from './CreateDeck';
 import { fetchDeckResults } from '../utils/api';
 import { receiveDecks } from '../actions/index';
+import TextButton from './TextButton';
 
 const DATA = [
   {
@@ -29,12 +30,9 @@ const DATA = [
   },
 ];
 
-const Item = ({ title }) => {
+const Item = ({ title, onSelect }) => {
   return (
-    <TouchableOpacity
-      onPress={() => console.log('button selected')}
-      style={styles.item}
-    >
+    <TouchableOpacity onPress={() => onSelect(title)} style={styles.item}>
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   );
@@ -53,8 +51,15 @@ class DecksView extends Component {
       .then(() => this.setState(() => ({ ready: true })));
   }
 
+  onSelect = (deck) => {
+    console.log('pressed');
+    this.props.navigation.navigate('Deck Details', {
+      deck: deck,
+    });
+  };
+
   render() {
-    console.log('debugging');
+    console.log(this.onSelect);
     const { decks } = this.props;
     const decksArray = Object.values(decks);
     console.log(decksArray);
@@ -62,14 +67,16 @@ class DecksView extends Component {
       <SafeAreaView style={styles.container}>
         <FlatList
           data={decksArray}
-          renderItem={({ item }) => <Item title={item.title} />}
-          keyExtractor={(item) => item.key}
+          renderItem={({ item }) => (
+            <Item title={item.title} onSelect={() => this.onSelect(item)} />
+          )}
+          keyExtractor={(item) => item.title}
         />
-        <TouchableOpacity
+        <TextButton
           onPress={() => this.props.navigation.navigate('Create Deck')}
         >
           <Text> Create a deck </Text>
-        </TouchableOpacity>
+        </TextButton>
       </SafeAreaView>
     );
   }

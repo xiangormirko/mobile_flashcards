@@ -12,6 +12,7 @@ import TextButton from './TextButton';
 import { createDeck } from '../utils/api';
 import { addDeck } from '../actions/index';
 import { white, purple } from '../utils/colors';
+import { CommonActions } from '@react-navigation/native';
 
 class CreateDeck extends Component {
   state = {
@@ -26,6 +27,14 @@ class CreateDeck extends Component {
     });
   };
 
+  toHome = () => {
+    this.props.navigation.dispatch(
+      CommonActions.goBack({
+        key: 'CreateDeck',
+      })
+    );
+  };
+
   create = () => {
     console.log('pressed create');
     const deck = this.state;
@@ -35,8 +44,8 @@ class CreateDeck extends Component {
         [deck.title]: deck,
       })
     );
-
     createDeck({ deck });
+    this.toHome();
   };
   render() {
     const { title } = this.state;
@@ -86,4 +95,10 @@ const style = StyleSheet.create({
   },
 });
 
-export default connect()(CreateDeck);
+function mapStateToProps(decks) {
+  return {
+    decks,
+  };
+}
+
+export default connect(mapStateToProps)(CreateDeck);
