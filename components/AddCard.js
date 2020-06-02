@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-} from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import Card from './Card';
 import TextButton from './TextButton';
-import { createDeck } from '../utils/api';
-import { addDeck } from '../actions/index';
+import { updateDeck } from '../utils/api';
+import { addCard } from '../actions/index';
 import { white, purple } from '../utils/colors';
 import { CommonActions } from '@react-navigation/native';
 
 class AddCard extends Component {
   state = {
     title: '',
+    description: '',
+    performance: [],
+    skip: false,
   };
 
   updateTitle = (text) => {
     this.setState({
       title: text,
-      cards: [],
-      performance: [],
+    });
+  };
+
+  updateDescription = (text) => {
+    this.setState({
+      description: text,
     });
   };
 
@@ -37,28 +37,35 @@ class AddCard extends Component {
 
   create = () => {
     console.log('pressed create');
-    const deck = this.state;
-    console.log(deck);
-    this.props.dispatch(
-      addDeck({
-        [deck.title]: deck,
-      })
-    );
-    createDeck({ deck });
-    this.toHome();
+    const card = this.state;
+    const cardId = card.title;
+    const { deckId } = this.props.route.params;
+    console.log('component');
+    console.log(deckId, cardId, card);
+    this.props.dispatch(addCard(deckId, cardId, card));
+    // updateDeck({ deckId, cardId, card });
+    // this.toHome();
   };
   render() {
-    const { title } = this.state;
+    const { title, description } = this.state;
     return (
       <View style={style.container}>
         <View style={style.card}>
           {/* <Text style={{ color: purple, fontSize: 25 }}>{title} "Ciao"</Text> */}
-          <Text style={style.title}>Enter Deck Name</Text>
+          <Text style={style.title}>Create Card</Text>
           <TextInput
             style={style.textInput}
             onChangeText={(text) => this.updateTitle(text)}
             value={title}
-            placeholder={'Enter here...'}
+            placeholder={'Enter concept to study...'}
+          />
+          <TextInput
+            style={style.descriptionInput}
+            multiline
+            numberOfLines={4}
+            onChangeText={(text) => this.updateDescription(text)}
+            value={description}
+            placeholder={'Enter description...'}
           />
         </View>
         <TextButton onPress={this.create} style={{ margin: 10 }}>
@@ -92,6 +99,14 @@ const style = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     paddingLeft: 5,
+  },
+
+  descriptionInput: {
+    height: 100,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingLeft: 5,
+    marginTop: 15,
   },
 });
 

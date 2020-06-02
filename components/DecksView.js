@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
@@ -14,21 +15,6 @@ import CreateDeck from './CreateDeck';
 import { fetchDeckResults } from '../utils/api';
 import { receiveDecks } from '../actions/index';
 import TextButton from './TextButton';
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
 
 const Item = ({ title, onSelect }) => {
   return (
@@ -48,7 +34,8 @@ class DecksView extends Component {
 
     fetchDeckResults()
       .then((decks) => dispatch(receiveDecks(decks)))
-      .then(() => this.setState(() => ({ ready: true })));
+      .then(() => this.setState(() => ({ ready: true })))
+      .then(console.log('ciao signore'));
   }
 
   onSelect = (deck) => {
@@ -59,10 +46,14 @@ class DecksView extends Component {
   };
 
   render() {
-    console.log(this.onSelect);
     const { decks } = this.props;
     const decksArray = Object.values(decks);
-    console.log(decksArray);
+    const { ready } = this.state;
+
+    if (ready === false) {
+      return <ActivityIndicator />;
+    }
+
     return (
       <SafeAreaView style={styles.container}>
         <FlatList

@@ -19,7 +19,9 @@ export function addDeck(deck) {
   };
 }
 
-export function addCard({ deckId, cardId, card }) {
+export function addCard(deckId, cardId, card) {
+  console.log('action');
+  console.log(deckId, cardId, card);
   return {
     type: ADD_CARD,
     deckId,

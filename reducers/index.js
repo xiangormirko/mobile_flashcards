@@ -15,16 +15,20 @@ export default function decks(state = {}, action) {
       };
     case ADD_CARD:
       const { deckId, cardId, card } = action;
+      console.log('reducer');
+      console.log(state[deckId]);
+
+      if (state[deckId].cards.some((card) => card['title'] === cardId)) {
+        console.log(card['title']);
+        console.log(cardId);
+        console.log('The same card already exists');
+        return { ...state };
+      }
       return {
         ...state,
         [deckId]: {
           ...state[deckId],
-          [cards]: {
-            ...state[deckId].cards,
-            cards: state[deckId].cards.includes(cardId)
-              ? console.log('same card already exists')
-              : state[deckId].cards.concat(card),
-          },
+          cards: state[deckId].cards.concat(card),
         },
       };
 

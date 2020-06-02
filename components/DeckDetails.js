@@ -29,7 +29,13 @@ class DeckDetails extends Component {
           <Text>{deck.title}</Text>
           <Text>{deck.cards.length}</Text>
         </View>
-        <TextButton onPress={() => this.props.navigation.navigate('Add Card')}>
+        <TextButton
+          onPress={() =>
+            this.props.navigation.navigate('Add Card', {
+              deckId: deck.title,
+            })
+          }
+        >
           <Text> Add a Card </Text>
         </TextButton>
       </SafeAreaView>

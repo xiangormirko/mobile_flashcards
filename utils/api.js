@@ -18,3 +18,11 @@ export function createDeck({ deck }) {
     })
   );
 }
+
+export function updateDeck({ deck }) {
+  return AsyncStorage.getItem(DECK_STORAGE_KEY).then((results) => {
+    const data = JSON.parse(results);
+    data[deck.title] = deck;
+    AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data));
+  });
+}
