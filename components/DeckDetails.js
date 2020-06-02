@@ -15,16 +15,9 @@ class DeckDetails extends Component {
   };
 
   render() {
-    const { deck } = this.props.route.params;
+    const deck = this.props.decks[this.props.route.params.deck.title];
     return (
       <SafeAreaView style={styles.container}>
-        {/* <FlatList
-          data={decksArray}
-          renderItem={({ item }) => (
-            <Item title={item.title} onSelect={() => this.onSelect(item)} />
-          )}
-          keyExtractor={(item) => item.title}
-        /> */}
         <View>
           <Text>{deck.title}</Text>
           <Text>{deck.cards.length}</Text>
@@ -58,4 +51,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(DeckDetails);
+function mapStateToProps(decks) {
+  return {
+    decks,
+  };
+}
+
+export default connect(mapStateToProps)(DeckDetails);

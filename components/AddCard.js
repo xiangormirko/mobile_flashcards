@@ -44,7 +44,7 @@ class AddCard extends Component {
     console.log(deckId, cardId, card);
     this.props.dispatch(addCard(deckId, cardId, card));
     // updateDeck({ deckId, cardId, card });
-    // this.toHome();
+    this.toHome();
   };
   render() {
     const { title, description } = this.state;
