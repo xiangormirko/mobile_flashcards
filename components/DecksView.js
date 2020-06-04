@@ -15,7 +15,7 @@ import CreateDeck from './CreateDeck';
 import { fetchDeckResults } from '../utils/api';
 import { receiveDecks } from '../actions/index';
 import TextButton from './TextButton';
-import { gray, lightPurple, white, blue } from '../utils/colors';
+import { gray, lightPurple, white, blue, purple } from '../utils/colors';
 
 const Item = ({ title, onSelect }) => {
   return (
@@ -57,6 +57,9 @@ class DecksView extends Component {
 
     return (
       <SafeAreaView style={styles.container}>
+        <View>
+          <Text style={styles.pageTitleText}> Your Decks</Text>
+        </View>
         <FlatList
           data={decksArray}
           renderItem={({ item }) => (
@@ -80,6 +83,7 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: gray,
+    borderRadius: 6,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -87,6 +91,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     color: white,
+  },
+  pageTitleText: {
+    textAlign: 'center',
+    fontSize: 25,
+    padding: 10,
+    color: white,
+    backgroundColor: purple,
   },
 });
 

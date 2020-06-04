@@ -78,6 +78,7 @@ const style = StyleSheet.create({
   card: {
     padding: 20,
     margin: 10,
+    marginTop: -50,
     backgroundColor: white,
     borderWidth: 2,
     borderColor: '#20232a',
