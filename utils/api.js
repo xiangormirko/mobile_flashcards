@@ -19,10 +19,15 @@ export function createDeck({ deck }) {
   );
 }
 
-export function updateDeck({ deck }) {
+export function updateDeck(deckId, cardId, card) {
   return AsyncStorage.getItem(DECK_STORAGE_KEY).then((results) => {
     const data = JSON.parse(results);
-    data[deck.title] = deck;
-    AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data));
+    if (data[deckId].cards.some((card) => card['title'] === cardId)) {
+      console.log('The same card already exists');
+      return;
+    } else {
+      data[deckId].cards.push(card);
+      AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data));
+    }
   });
 }

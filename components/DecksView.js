@@ -15,6 +15,7 @@ import CreateDeck from './CreateDeck';
 import { fetchDeckResults } from '../utils/api';
 import { receiveDecks } from '../actions/index';
 import TextButton from './TextButton';
+import { gray, lightPurple, white, blue } from '../utils/colors';
 
 const Item = ({ title, onSelect }) => {
   return (
@@ -78,13 +79,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: gray,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
   },
   title: {
     fontSize: 32,
+    color: white,
   },
 });
 

@@ -19,8 +19,6 @@ export default function decks(state = {}, action) {
       console.log(state[deckId]);
 
       if (state[deckId].cards.some((card) => card['title'] === cardId)) {
-        console.log(card['title']);
-        console.log(cardId);
         console.log('The same card already exists');
         return { ...state };
       }
