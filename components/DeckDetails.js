@@ -21,10 +21,6 @@ const Item = ({ title, description, onSelect }) => {
 };
 
 class DeckDetails extends Component {
-  state = {
-    test: 'Ciao coccodrillo',
-  };
-
   onSelect = (card) => {
     console.log('pressed a card');
   };
@@ -71,7 +67,7 @@ class DeckDetails extends Component {
         <TextButton
           style={{ backgroundColor: yellow }}
           onPress={() =>
-            this.props.navigation.navigate('Add Card', {
+            this.props.navigation.navigate('Quiz', {
               deckId: deck.title,
             })
           }

@@ -40,7 +40,6 @@ class DecksView extends Component {
   }
 
   onSelect = (deck) => {
-    console.log('pressedd');
     this.props.navigation.navigate('Deck Details', {
       deck: deck,
     });

@@ -6,8 +6,6 @@ import reducer from './reducers';
 import middleware from './middleware';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,8 +14,8 @@ import DecksView from './components/DecksView';
 import DeckDetails from './components/DeckDetails';
 import CreateDeck from './components/CreateDeck';
 import AddCard from './components/AddCard';
+import QuizView from './components/QuizView';
 import { white, purple } from './utils/colors';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import logger from './middleware/logger';
 
@@ -59,6 +57,11 @@ const StackConfig = {
     component: AddCard,
     options: { headerShown: true },
   },
+  QuizView: {
+    name: 'Quiz',
+    component: QuizView,
+    options: { headerShown: true },
+  },
 };
 
 const Stack = createStackNavigator();
@@ -68,6 +71,7 @@ const MainNav = () => (
     <Stack.Screen {...StackConfig['DeckDetails']} />
     <Stack.Screen {...StackConfig['CreateDeck']} />
     <Stack.Screen {...StackConfig['AddCard']} />
+    <Stack.Screen {...StackConfig['QuizView']} />
   </Stack.Navigator>
 );
 
