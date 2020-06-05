@@ -11,8 +11,8 @@ import { connect } from 'react-redux';
 import TextButton from './TextButton';
 import { createDeck } from '../utils/api';
 import { addDeck } from '../actions/index';
-import { gray, yellow, white, blue } from '../utils/colors';
-import { CommonActions } from '@react-navigation/native';
+import { gray, yellow, white, blue, red, green } from '../utils/colors';
+import { updateDeck } from '../utils/api';
 
 function shuffle(array) {
   let i = array.length;
@@ -24,14 +24,6 @@ function shuffle(array) {
 }
 
 class QuizView extends Component {
-  // toHome = () => {
-  //   this.props.navigation.dispatch(
-  //     CommonActions.goBack({
-  //       key: 'QuizView',
-  //     })
-  //   );
-  // };
-
   state = {
     quizIndex: 0,
     quizDeck: [],
@@ -40,12 +32,80 @@ class QuizView extends Component {
     testedCards: 0,
     currentCard: { title: 'loading', description: 'loading' },
     solutionView: false,
+    title: 'loading',
   };
 
   getAnswer = () => {
     this.setState({
       solutionView: true,
     });
+  };
+
+  correct = () => {
+    const {
+      correctCards,
+      quizIndex,
+      testedCards,
+      quizDeck,
+      remainingCards,
+    } = this.state;
+    const nextCardIndex = this.state.quizIndex + 1;
+    console.log(nextCardIndex);
+    if (remainingCards === 1) {
+      console.log('last one correct');
+      this.setState({
+        correctCards: correctCards + 1,
+        testedCards: testedCards + 1,
+        remainingCards: remainingCards - 1,
+        solutionView: false,
+        currentCard: {
+          title: `Your Final Score: ${correctCards + 1}/${testedCards + 1}`,
+          description: 'Quiz Complete',
+        },
+        title: 'Quiz Completed',
+      });
+    } else {
+      this.setState({
+        correctCards: correctCards + 1,
+        quizIndex: quizIndex + 1,
+        testedCards: testedCards + 1,
+        remainingCards: remainingCards - 1,
+        solutionView: false,
+        currentCard: quizDeck[nextCardIndex],
+      });
+    }
+  };
+
+  incorrect = () => {
+    const {
+      correctCards,
+      quizIndex,
+      testedCards,
+      quizDeck,
+      remainingCards,
+    } = this.state;
+    const nextCardIndex = this.state.quizIndex + 1;
+    console.log(nextCardIndex);
+    if (remainingCards === 1) {
+      this.setState({
+        testedCards: testedCards + 1,
+        remainingCards: remainingCards - 1,
+        solutionView: false,
+        currentCard: {
+          title: `${correctCards}/${testedCards + 1}`,
+          description: 'Quiz Complete',
+        },
+        title: 'Quiz Completed',
+      });
+    } else {
+      this.setState({
+        quizIndex: quizIndex + 1,
+        testedCards: testedCards + 1,
+        remainingCards: remainingCards - 1,
+        solutionView: false,
+        currentCard: quizDeck[nextCardIndex],
+      });
+    }
   };
 
   componentDidMount() {
@@ -61,18 +121,26 @@ class QuizView extends Component {
     }));
   }
 
-  create = () => {
-    console.log('pressed create');
-    // const deck = this.state;
-    // console.log(deck);
-    // this.props.dispatch(
-    //   addDeck({
-    //     [deck.title]: deck,
-    //   })
-    // );
-    // createDeck({ deck });
-    // this.toHome();
-  };
+  // create = () => {
+  //   console.log('pressed create');
+  //   const { correctCards, testedCards } = this.state;
+  //   this.props.dispatch(
+  //     addDeck({
+  //       [deck.title]: deck,
+  //     })
+  //   );
+  //   createDeck({ deck });
+  //   this.toHome();
+  // };
+
+  // toHome = () => {
+  //   this.props.navigation.dispatch(
+  //     CommonActions.goBack({
+  //       key: 'QuizView',
+  //     })
+  //   );
+  // };
+
   render() {
     const {
       currentCard,
@@ -94,18 +162,33 @@ class QuizView extends Component {
         </View>
         <View>
           <View style={styles.card}>
-            {/* <Text style={{ color: purple, fontSize: 25 }}>{title} "Ciao"</Text> */}
             <Text style={styles.title}>{currentCard.title}</Text>
           </View>
           {this.state.solutionView === true ? (
             <View>
-              <View style={styles.card}>
-                <Text style={styles.title}>{currentCard.description}</Text>
+              <View style={[styles.card, styles.solutionCard]}>
+                <Text style={[styles.title, styles.solutionTitle]}>
+                  {currentCard.description}
+                </Text>
               </View>
-              <TextButton onPress={this.create} style={{ margin: 10 }}>
-                Did you get it?
-              </TextButton>
+              <View style={styles.answers}>
+                <TextButton
+                  onPress={this.incorrect}
+                  style={{ backgroundColor: red, width: 150, flex: 1 }}
+                >
+                  Incorrect
+                </TextButton>
+
+                <TextButton
+                  onPress={this.correct}
+                  style={{ backgroundColor: green, width: 150, flex: 1 }}
+                >
+                  Got it!
+                </TextButton>
+              </View>
             </View>
+          ) : this.state.remainingCards === 0 ? (
+            <Text></Text>
           ) : (
             <TextButton onPress={this.getAnswer} style={{ margin: 10 }}>
               Get Solution
@@ -133,6 +216,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#20232a',
     borderRadius: 6,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 25,
@@ -152,6 +236,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 60,
   },
+  answers: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   box: {
     flex: 1,
     margin: 10,
@@ -159,6 +247,13 @@ const styles = StyleSheet.create({
     borderColor: gray,
     borderRadius: 6,
     padding: 10,
+  },
+  solutionCard: {
+    backgroundColor: gray,
+    borderColor: white,
+  },
+  solutionTitle: {
+    color: white,
   },
 });
 

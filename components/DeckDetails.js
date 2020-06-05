@@ -21,6 +21,10 @@ const Item = ({ title, description, onSelect }) => {
 };
 
 class DeckDetails extends Component {
+  state = {
+    title: 'loading',
+  };
+
   onSelect = (card) => {
     console.log('pressed a card');
   };
