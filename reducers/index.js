@@ -1,4 +1,10 @@
-import { RECEIVE_DECKS, ADD_DECK, DELETE_DECK, ADD_CARD } from '../actions';
+import {
+  RECEIVE_DECKS,
+  ADD_DECK,
+  DELETE_DECK,
+  ADD_CARD,
+  ADD_RESULTS,
+} from '../actions';
 
 export default function decks(state = {}, action) {
   switch (action.type) {
@@ -13,10 +19,8 @@ export default function decks(state = {}, action) {
         ...state,
         ...action.deck,
       };
-    case ADD_CARD:
+    case ADD_CARD: {
       const { deckId, cardId, card } = action;
-      console.log('reducer');
-      console.log(state[deckId]);
 
       if (state[deckId].cards.some((card) => card['title'] === cardId)) {
         console.log('The same card already exists');
@@ -29,7 +33,21 @@ export default function decks(state = {}, action) {
           cards: state[deckId].cards.concat(card),
         },
       };
+    }
 
+    case ADD_RESULTS: {
+      const { deckId, results } = action;
+      // console.log('reducer');
+      // console.log(state[deckId]);
+
+      return {
+        ...state,
+        [deckId]: {
+          ...state[deckId],
+          performance: state[deckId].performance.concat(results),
+        },
+      };
+    }
     default:
       return state;
   }

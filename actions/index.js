@@ -4,7 +4,8 @@ export const DELETE_DECK = 'DELETE_DECK';
 export const ADD_CARD = 'ADD_CARD';
 export const UPDATE_CARD = 'EDIT_CARD';
 export const DELETE_CARD = 'DELETE_CARD';
-import { updateDeck } from '../utils/api';
+export const ADD_RESULTS = 'ADD_RESULTS';
+import { updateDeck, updateDeckResults } from '../utils/api';
 
 export function receiveDecks(decks) {
   return {
@@ -21,18 +22,19 @@ export function addDeck(deck) {
 }
 
 export function addCard(deckId, cardId, card) {
-  // console.log('action');
-  // console.log(deckId, cardId, card);
   return (dispatch) => {
     dispatch({ type: ADD_CARD, deckId, cardId, card });
     return updateDeck(deckId, cardId, card).catch((e) => {
       console.warn('Error in updateDeck: ', e);
     });
   };
-  // return {
-  //   type: ADD_CARD,
-  //   deckId,
-  //   cardId,
-  //   card,
-  // };
+}
+
+export function addResults(deckId, results) {
+  return (dispatch) => {
+    dispatch({ type: ADD_RESULTS, deckId, results });
+    return updateDeckResults(deckId, results).catch((e) => {
+      console.warn('Error in addResults: ', e);
+    });
+  };
 }

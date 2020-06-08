@@ -31,3 +31,11 @@ export function updateDeck(deckId, cardId, card) {
     }
   });
 }
+
+export function updateDeckResults(deckId, results) {
+  return AsyncStorage.getItem(DECK_STORAGE_KEY).then((res) => {
+    const data = JSON.parse(res);
+    data[deckId].performance.push(results);
+    AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data));
+  });
+}

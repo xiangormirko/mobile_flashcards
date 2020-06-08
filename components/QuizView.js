@@ -10,9 +10,10 @@ import {
 import { connect } from 'react-redux';
 import TextButton from './TextButton';
 import { createDeck } from '../utils/api';
-import { addDeck } from '../actions/index';
+import { addResults } from '../actions/index';
 import { gray, yellow, white, blue, red, green } from '../utils/colors';
 import { updateDeck } from '../utils/api';
+import { CommonActions } from '@react-navigation/native';
 
 function shuffle(array) {
   let i = array.length;
@@ -118,6 +119,7 @@ class QuizView extends Component {
       quizDeck: cards,
       remainingCards: cards.length,
       currentCard: cards[0],
+      deckId: this.props.route.params.deckId,
     }));
   }
 
@@ -133,13 +135,21 @@ class QuizView extends Component {
   //   this.toHome();
   // };
 
-  // toHome = () => {
-  //   this.props.navigation.dispatch(
-  //     CommonActions.goBack({
-  //       key: 'QuizView',
-  //     })
-  //   );
-  // };
+  finish = () => {
+    const { deckId, correctCards, testedCards } = this.state;
+    const results = `${correctCards}/${testedCards}`;
+    console.log(results);
+    this.props.dispatch(addResults(deckId, results));
+    this.toHome();
+  };
+
+  toHome = () => {
+    this.props.navigation.dispatch(
+      CommonActions.goBack({
+        key: 'QuizView',
+      })
+    );
+  };
 
   render() {
     const {
@@ -195,7 +205,7 @@ class QuizView extends Component {
             </TextButton>
           )}
         </View>
-        <TextButton onPress={this.create} style={{ margin: 10 }}>
+        <TextButton onPress={this.finish} style={{ margin: 10 }}>
           Finish
         </TextButton>
       </SafeAreaView>
