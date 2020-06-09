@@ -39,3 +39,12 @@ export function updateDeckResults(deckId, results) {
     AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data));
   });
 }
+
+export const clearAppData = async function () {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    await AsyncStorage.multiRemove(keys);
+  } catch (error) {
+    console.error('Error clearing app data.');
+  }
+};

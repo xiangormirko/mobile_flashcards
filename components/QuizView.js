@@ -33,7 +33,7 @@ class QuizView extends Component {
     testedCards: 0,
     currentCard: { title: 'loading', description: 'loading' },
     solutionView: false,
-    title: 'loading',
+    quizComplete: false,
   };
 
   getAnswer = () => {
@@ -53,12 +53,12 @@ class QuizView extends Component {
     const nextCardIndex = this.state.quizIndex + 1;
     console.log(nextCardIndex);
     if (remainingCards === 1) {
-      console.log('last one correct');
       this.setState({
         correctCards: correctCards + 1,
         testedCards: testedCards + 1,
         remainingCards: remainingCards - 1,
         solutionView: false,
+        quizComplete: true,
         currentCard: {
           title: `Your Final Score: ${correctCards + 1}/${testedCards + 1}`,
           description: 'Quiz Complete',
@@ -91,12 +91,12 @@ class QuizView extends Component {
       this.setState({
         testedCards: testedCards + 1,
         remainingCards: remainingCards - 1,
+        quizComplete: true,
         solutionView: false,
         currentCard: {
           title: `${correctCards}/${testedCards + 1}`,
           description: 'Quiz Complete',
         },
-        title: 'Quiz Completed',
       });
     } else {
       this.setState({
@@ -109,12 +109,30 @@ class QuizView extends Component {
     }
   };
 
+  restart = () => {
+    const {
+      correctCards,
+      quizIndex,
+      testedCards,
+      quizDeck,
+      remainingCards,
+    } = this.state;
+    const nextCardIndex = this.state.quizIndex + 1;
+
+    this.setState({
+      quizIndex: 0,
+      testedCards: 0,
+      remainingCards: quizDeck.length,
+      solutionView: false,
+      currentCard: quizDeck[0],
+      quizComplete: false,
+      correctCards: 0,
+    });
+  };
+
   componentDidMount() {
     const deck = this.props.decks[this.props.route.params.deckId];
-    console.log(deck);
     const cards = shuffle(Object.values(deck.cards));
-    console.log('shuffled...');
-    console.log(cards);
     this.setState(() => ({
       quizDeck: cards,
       remainingCards: cards.length,
@@ -122,18 +140,6 @@ class QuizView extends Component {
       deckId: this.props.route.params.deckId,
     }));
   }
-
-  // create = () => {
-  //   console.log('pressed create');
-  //   const { correctCards, testedCards } = this.state;
-  //   this.props.dispatch(
-  //     addDeck({
-  //       [deck.title]: deck,
-  //     })
-  //   );
-  //   createDeck({ deck });
-  //   this.toHome();
-  // };
 
   finish = () => {
     const { deckId, correctCards, testedCards } = this.state;
@@ -205,9 +211,23 @@ class QuizView extends Component {
             </TextButton>
           )}
         </View>
-        <TextButton onPress={this.finish} style={{ margin: 10 }}>
-          Finish
-        </TextButton>
+        {this.state.quizComplete === true ? (
+          <View>
+            <TextButton
+              onPress={this.restart}
+              style={{ margin: 10, backgroundColor: yellow }}
+            >
+              Restart Quiz
+            </TextButton>
+            <TextButton onPress={this.finish} style={{ margin: 10 }}>
+              Finish
+            </TextButton>
+          </View>
+        ) : (
+          <TextButton onPress={this.finish} style={{ margin: 10 }}>
+            Finish
+          </TextButton>
+        )}
       </SafeAreaView>
     );
   }

@@ -7,20 +7,23 @@ import {
   SafeAreaView,
   FlatList,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import Card from './Card';
-import CreateDeck from './CreateDeck';
-import { fetchDeckResults } from '../utils/api';
+import { fetchDeckResults, clearAppData } from '../utils/api';
 import { receiveDecks } from '../actions/index';
 import TextButton from './TextButton';
-import { gray, lightPurple, white, blue, purple } from '../utils/colors';
+import { gray, white, purple } from '../utils/colors';
 
-const Item = ({ title, onSelect }) => {
+const Item = ({ title, onSelect, cardsNum, bounceValue }) => {
   return (
     <TouchableOpacity onPress={() => onSelect(title)} style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+      <Animated.Text
+        style={[styles.title, { transform: [{ scale: bounceValue }] }]}
+      >
+        {title}
+      </Animated.Text>
+      <Text style={styles.cardsNumber}> Cards contained: {cardsNum}</Text>
     </TouchableOpacity>
   );
 };
@@ -28,6 +31,7 @@ const Item = ({ title, onSelect }) => {
 class DecksView extends Component {
   state = {
     ready: false,
+    bounceValue: new Animated.Value(1),
   };
 
   componentDidMount() {
@@ -40,15 +44,24 @@ class DecksView extends Component {
   }
 
   onSelect = (deck) => {
-    this.props.navigation.navigate('Deck Details', {
-      deck: deck,
-    });
+    const { bounceValue } = this.state;
+    Animated.sequence([
+      Animated.timing(bounceValue, { duration: 50, toValue: 1.1 }),
+      Animated.spring(bounceValue, { toValue: 1, friction: 4 }),
+    ]).start();
+    setTimeout(() => {
+      this.props.navigation.navigate('Deck Details', {
+        deck: deck,
+      });
+    }, 500);
   };
 
   render() {
     const { decks } = this.props;
     const decksArray = Object.values(decks);
-    const { ready } = this.state;
+    const { ready, bounceValue } = this.state;
+
+    console.log(decksArray);
 
     if (ready === false) {
       return <ActivityIndicator />;
@@ -62,7 +75,12 @@ class DecksView extends Component {
         <FlatList
           data={decksArray}
           renderItem={({ item }) => (
-            <Item title={item.title} onSelect={() => this.onSelect(item)} />
+            <Item
+              title={item.title}
+              cardsNum={item.cards.length}
+              bounceValue={bounceValue}
+              onSelect={() => this.onSelect(item)}
+            />
           )}
           keyExtractor={(item) => item.title}
         />
@@ -97,6 +115,9 @@ const styles = StyleSheet.create({
     padding: 10,
     color: white,
     backgroundColor: purple,
+  },
+  cardsNumber: {
+    color: white,
   },
 });
 
