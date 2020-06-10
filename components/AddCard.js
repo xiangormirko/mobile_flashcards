@@ -36,12 +36,9 @@ class AddCard extends Component {
   };
 
   create = () => {
-    console.log('pressed create');
     const card = this.state;
     const cardId = card.title;
     const { deckId } = this.props.route.params;
-    console.log('component');
-    console.log(deckId, cardId, card);
     this.props.dispatch(addCard(deckId, cardId, card));
     // updateDeck({ deckId, cardId, card });
     this.toHome();
