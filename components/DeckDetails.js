@@ -26,6 +26,7 @@ class DeckDetails extends Component {
   };
 
   onSelect = (card) => {
+    // Add future functionality to manage cards, skip for V1
     console.log('pressed a card');
   };
 

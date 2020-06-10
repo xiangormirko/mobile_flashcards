@@ -9,7 +9,6 @@ export function fetchDeckResults() {
 }
 
 export function createDeck({ deck }) {
-  console.log('create deck invoked');
   const title = deck.title;
   return AsyncStorage.mergeItem(
     DECK_STORAGE_KEY,

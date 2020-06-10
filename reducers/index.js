@@ -23,7 +23,6 @@ export default function decks(state = {}, action) {
       const { deckId, cardId, card } = action;
 
       if (state[deckId].cards.some((card) => card['title'] === cardId)) {
-        console.log('The same card already exists');
         return { ...state };
       }
       return {
@@ -37,8 +36,6 @@ export default function decks(state = {}, action) {
 
     case ADD_RESULTS: {
       const { deckId, results } = action;
-      // console.log('reducer');
-      // console.log(state[deckId]);
 
       return {
         ...state,

@@ -36,9 +36,7 @@ class CreateDeck extends Component {
   };
 
   create = () => {
-    console.log('pressed create');
     const deck = this.state;
-    console.log(deck);
     this.props.dispatch(
       addDeck({
         [deck.title]: deck,

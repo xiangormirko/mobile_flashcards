@@ -13,6 +13,7 @@ import { createDeck } from '../utils/api';
 import { addResults } from '../actions/index';
 import { gray, yellow, white, blue, red, green } from '../utils/colors';
 import { updateDeck } from '../utils/api';
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers';
 import { CommonActions } from '@react-navigation/native';
 
 function shuffle(array) {
@@ -51,7 +52,6 @@ class QuizView extends Component {
       remainingCards,
     } = this.state;
     const nextCardIndex = this.state.quizIndex + 1;
-    console.log(nextCardIndex);
     if (remainingCards === 1) {
       this.setState({
         correctCards: correctCards + 1,
@@ -86,7 +86,6 @@ class QuizView extends Component {
       remainingCards,
     } = this.state;
     const nextCardIndex = this.state.quizIndex + 1;
-    console.log(nextCardIndex);
     if (remainingCards === 1) {
       this.setState({
         testedCards: testedCards + 1,
@@ -144,8 +143,8 @@ class QuizView extends Component {
   finish = () => {
     const { deckId, correctCards, testedCards } = this.state;
     const results = `${correctCards}/${testedCards}`;
-    console.log(results);
     this.props.dispatch(addResults(deckId, results));
+    clearLocalNotification().then(setLocalNotification);
     this.toHome();
   };
 

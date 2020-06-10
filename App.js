@@ -9,7 +9,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
-import { setLocalNotification } from './utils/helpers';
+import {
+  setLocalNotification,
+  alertIfRemoteNotificationsDisabledAsync,
+} from './utils/helpers';
 import DecksView from './components/DecksView';
 import DeckDetails from './components/DeckDetails';
 import CreateDeck from './components/CreateDeck';
@@ -77,9 +80,9 @@ const MainNav = () => (
 
 // App
 export default class App extends React.Component {
-  // componentDidMount() {
-  //   setLocalNotification();
-  // }
+  componentDidMount() {
+    setLocalNotification();
+  }
   render() {
     const store = createStore(
       reducer,

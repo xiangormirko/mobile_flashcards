@@ -39,8 +39,7 @@ class DecksView extends Component {
 
     fetchDeckResults()
       .then((decks) => dispatch(receiveDecks(decks)))
-      .then(() => this.setState(() => ({ ready: true })))
-      .then(console.log('ciao signore'));
+      .then(() => this.setState(() => ({ ready: true })));
   }
 
   onSelect = (deck) => {
@@ -60,8 +59,6 @@ class DecksView extends Component {
     const { decks } = this.props;
     const decksArray = Object.values(decks);
     const { ready, bounceValue } = this.state;
-
-    console.log(decksArray);
 
     if (ready === false) {
       return <ActivityIndicator />;
